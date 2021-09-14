@@ -1,0 +1,43 @@
+* {
+    /* border: 2px solid red; */
+}
+
+#header {
+
+}
+
+.hour {
+    display: flex;
+}
+
+.hourChild.hourShow {
+    text-align: center;
+    margin: auto;
+    padding: 12px;
+    width: 10%;
+    border: 3px solid black;
+    border-radius: 10px;
+}
+
+.hourChild.hourText {
+    text-align: center;
+    margin: auto;
+    padding: 5px;
+    width: 80%;
+    border: 3px solid black;
+    border-radius: 10px;
+}
+
+.hourChild.hourText textarea {
+    resize: none;
+    border: none;
+}
+
+.hourChild.hourSave {
+    text-align: center;
+    margin: auto;
+    padding: 25px;
+    width: 10%;
+    border: 3px solid black;
+    border-radius: 10px;
+}

@@ -11,7 +11,6 @@ time();
 var plannerData = [];
 var plannerDay = {
     date: "",
-    // initialize empty array of length 24
     hour: Array.apply(null, Array(24)).map(function () {}),
     text: Array.apply(null, Array(24)).map(function () {})
 }
@@ -28,13 +27,9 @@ $(function() {
     console.log("Todays date: " + currentDay);
     createHTML();
     populateHours();
+    setColors();
 
 });
-
-// 1. First call create HTML
-// 2. Then call populateHours, here we check if there is already text stored
-// 3. Run other code
-
 
 function createHTML() {
     for (var i = 0; i < 24; i++) {
@@ -43,6 +38,7 @@ function createHTML() {
             id: "hour" + i,
             class: "hour"
         }).appendTo("#day");
+
         // Create the hour label
         $("<div/>", {
             id: "hourShow" + i,
@@ -59,7 +55,6 @@ function createHTML() {
             $("#hourShowText" + i).text(i + "pm");
         else
             $("#hourShowText" + i).text((i - 12) + "pm");
-        
         // Create the text area
         $("<div/>", {
             id: "hourText" + i,
@@ -86,20 +81,14 @@ function createHTML() {
 function setData(event) {
     var index = event.target.id.replace(/\D/g, "");
     var day = findDay();
-    console.log("SETTING DATA!");
-    console.log("TEXT: " + $("#textArea" + index).val());
     if ($("#textArea" + index).val() === "") {
-        console.log("SAVING EMPTY!");
         var data = JSON.parse(localStorage.getItem("plannerData"));
         data[day].hour[index] = false;
         data[day].text[index] = "";
-
         localStorage.setItem("plannerData", JSON.stringify(data));
         return;
-    }
-        
+    } 
     if (localStorage.getItem("plannerData") !== null) {
-        // Case when text is empty
         if (day !== null || day) {
             // add data to the day
             var data = JSON.parse(localStorage.getItem("plannerData"));
@@ -127,20 +116,37 @@ function setData(event) {
 }
 
 function getData(data, hour) {
-    console.log("data.text[hour]: " + data.text[hour]);
-     $("#textArea" + hour.toString()).val(data.text[hour]);
-     return;
+    $("#textArea" + hour.toString()).val(data.text[hour]);
+    return;
 }
 
 function populateHours() {
     var data = JSON.parse(localStorage.getItem("plannerData"));
     var day = findDay();
+    console.log(day)
     if (day !== null) {
         for (var i = 0; i < data[day].hour.length; i++) {
             if (data[day].hour[i] === true) {
                 getData(data[day], i)
-            }
-                
+            }     
+        }    
+    }
+    return;
+}
+
+function setColors() {
+    var currentHour = moment().format("HH");
+    console.log("currenntHour: " + currentHour);
+    for (var i = 0; i < 24; i++) {
+        if (i < currentHour) {
+            $("#textArea" + i).css("background-color", "gray");
+            $("#hourText" + i).css("background-color", "gray");
+        } else if (i == currentHour) {
+            $("#textArea" + i).css("background-color", "red");
+            $("#hourText" + i).css("background-color", "red");
+        } else {
+            $("#textArea" + i).css("background-color", "green");
+            $("#hourText" + i).css("background-color", "green");
         }
     }
     return;
@@ -151,10 +157,8 @@ function findDay() {
     if (data === null)
         return null;
     for (var i = 0; i < data.length; i++) {
-        if (data[i].date === currentDay) {
+        if (data[i].date === currentDay)
             return i;
-        }
-    }
-    // This means the data object exists but the day hasn't been added
+    }  
     return false;
 }

@@ -1,44 +1,42 @@
-// $("#timer").html(moment().format("dddd MMMM DD YYYY HH:mm:ss"));
+// !!! --- TODO --- !!!
+// Done.
 
-function time() {
-    console.log("Start Time");
-    var timer = setInterval(function() {
-        console.log("...")
-        $("#headerDate").html(moment().format("dddd MMMM DD"));
-    }, 1000);
-}
-time();
-var plannerData = [];
 var plannerDay = {
     date: "",
-    hour: Array.apply(null, Array(24)).map(function () {}),
-    text: Array.apply(null, Array(24)).map(function () {})
+    hour: new Array(24).fill(false),
+    text: Array.from("".repeat(24))
 }
-console.log(plannerDay.hour.length);
-
 var currentDay = "";
+var selectedDay = "";
 
 // Main function - Call this when the page first loads or when the
 // user switches to a new day
 $(function() {
-    // Fix this
+    $("#calendar").datepicker({
+        showOn: "button",
+        buttonText: "Change Date",
+        dateFormat: "MM dd yy",
+        onSelect: function(dateText) {
+            currentDay = dateText;
+            $("#headerDate").html(moment(currentDay, "MMMM DD YYYY").format("dddd MMMM DD"));
+            populateHours();
+        }
+    })
     console.log("Ready!");
     currentDay = moment().format("MMMM DD YYYY")
-    console.log("Todays date: " + currentDay);
     createHTML();
     populateHours();
     setColors();
-
 });
 
 function createHTML() {
+    $("#headerDate").html(moment().format("dddd MMMM DD"));
     for (var i = 0; i < 24; i++) {
         // Create the container for each hour
         $("<div/>", {
             id: "hour" + i,
             class: "hour"
         }).appendTo("#day");
-
         // Create the hour label
         $("<div/>", {
             id: "hourShow" + i,
@@ -81,23 +79,18 @@ function createHTML() {
 function setData(event) {
     var index = event.target.id.replace(/\D/g, "");
     var day = findDay();
-    if ($("#textArea" + index).val() === "") {
-        var data = JSON.parse(localStorage.getItem("plannerData"));
-        data[day].hour[index] = false;
-        data[day].text[index] = "";
-        localStorage.setItem("plannerData", JSON.stringify(data));
-        return;
-    } 
     if (localStorage.getItem("plannerData") !== null) {
-        if (day !== null || day) {
-            // add data to the day
+        if ($("#textArea" + index).val() === "") {
+            var data = JSON.parse(localStorage.getItem("plannerData"));
+            data[day].hour[index] = false;
+            data[day].text[index] = "";
+            localStorage.setItem("plannerData", JSON.stringify(data));
+        } else if (Number.isInteger(day)) {
             var data = JSON.parse(localStorage.getItem("plannerData"));
             data[day].hour[index] = true;
             data[day].text[index] = $("#textArea" + index).val();
             localStorage.setItem("plannerData", JSON.stringify(data));
-        } else if (!day) {
-            // !!! --- This is when we're adding a new day ... Push HERE
-            console.log("Adding new day!");
+        } else {
             var data = JSON.parse(localStorage.getItem("plannerData"));
             plannerDay.date = currentDay
             plannerDay.hour[index] = true;
@@ -106,7 +99,6 @@ function setData(event) {
             localStorage.setItem("plannerData", JSON.stringify(data));
         }
     } else {
-        // Creates brand new data object
         plannerDay.date = currentDay;
         plannerDay.hour[index] = true;
         plannerDay.text[index] = $("#textArea" + index).val();
@@ -116,27 +108,32 @@ function setData(event) {
 }
 
 function getData(data, hour) {
-    $("#textArea" + hour.toString()).val(data.text[hour]);
+    $("#textArea" + hour).val(data.text[hour]);
     return;
 }
 
 function populateHours() {
     var data = JSON.parse(localStorage.getItem("plannerData"));
     var day = findDay();
-    console.log(day)
-    if (day !== null) {
+    console.log("DAY: " + day)
+    if (Number.isInteger(day)) {
         for (var i = 0; i < data[day].hour.length; i++) {
             if (data[day].hour[i] === true) {
                 getData(data[day], i)
+            } else {
+                $("#textArea" + i).val("");
             }     
         }    
+    } else if (!day) {
+        for (var i = 0; i < 24; i++) {
+            $("#textArea" + i).val("");
+        }
     }
     return;
 }
 
 function setColors() {
     var currentHour = moment().format("HH");
-    console.log("currenntHour: " + currentHour);
     for (var i = 0; i < 24; i++) {
         if (i < currentHour) {
             $("#textArea" + i).css("background-color", "gray");
@@ -157,8 +154,9 @@ function findDay() {
     if (data === null)
         return null;
     for (var i = 0; i < data.length; i++) {
-        if (data[i].date === currentDay)
+        if (data[i].date === currentDay) {
             return i;
-    }  
+        }   
+    }
     return false;
 }

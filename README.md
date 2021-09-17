@@ -1,16 +1,22 @@
 # work-day-scheduler
 UCR Extension Program HW5
 
-GIVEN I am using a daily planner to create a schedule
-WHEN I open the planner
-THEN the current day is displayed at the top of the calendar
-WHEN I scroll down
-THEN I am presented with timeblocks for standard business hours
-WHEN I view the timeblocks for that day
-THEN each timeblock is color coded to indicate whether it is in the past, present, or future
-WHEN I click into a timeblock
-THEN I can enter an event
-WHEN I click the save button for that timeblock
-THEN the text for that event is saved in local storage
-WHEN I refresh the page
-THEN the saved events persist
+## Description
+- Create a program that lets users plan their day by the hour.
+- The calendar has 24 hour time blocks where the user can input
+their activites for that hour and save it.
+- The user can also switch to different days.
+
+# Installation
+- Available on: https://confusion-matrix.github.io/work-day-scheduler/
+
+## Usage
+- On the website, click on the time slot and type your activity.
+- Click on the save button to save the text.
+- Images:
+
+![alt text](/assets/images/screenshot1.PNG?raw=true)
+
+![alt text](/assets/images/screenshot2.PNG?raw=true)
+
+![alt text](/assets/images/screenshot3.PNG?raw=true)

@@ -6,17 +6,23 @@
         <title>Planner</title>
         <link rel="stylesheet" href="./assets/style.css" />
     </head>
+   
     <body style="background-color: #ffffff;">
         <div id="header">
             <p>Todays date ...</p>
             <h1 id="headerDate"></h1>
         </div>
+        <div id="datePicker" class="datePickerContainer">
+            <input type="input" id="calendar" class="dateButton"/>
+        </div>
         <div id="day">
-            <!-- Create rows here -->
+            <!-- Hour blocks are created here -->
         </div>
 
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="./assets/script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 </html>
